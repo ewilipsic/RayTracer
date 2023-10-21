@@ -29,14 +29,14 @@ class World{
     void raytrace(ray& r){
         int min_index = 0;
         double min_t = __DBL_MAX__;
-        for(int i = 0;i<s;i+=2){
+        for(int i = 0;i<s;i++){
             double t = sphere_collision(sphere_cen[i],sphere_r[i],r);
             if(t<min_t){
                 min_t = t;
                 min_index = i;
             }
         }
-        r.color = sphere_col[min_index];
+        (min_t == __DBL_MAX__) ? r.color = vec3() : r.color = sphere_col[min_index];
     }    
 
          
