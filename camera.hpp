@@ -1,6 +1,7 @@
+#pragma once
 #include"vec3.hpp"
 
-class camera{
+class Camera{
     public:
 
     int image_height,image_width;
@@ -43,3 +44,5 @@ class camera{
     }
 
 };
+
+Camera camera;

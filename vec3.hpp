@@ -44,7 +44,7 @@ public:
     }
     //static
     
-    vec3 zero(){
+    static vec3 zero(){
         return(vec3(0,0,0));
     }
 };

@@ -1,8 +1,11 @@
 #pragma once
-#include"vec3.hpp"
+#include"camera.hpp"
+#include<cstdlib>
 
 class World{
     public:
+
+    int samples  = 100;
 
     // spheres  (s)
     #define s 2
@@ -26,23 +29,43 @@ class World{
     }
 
     // world.raytrace
-    void raytrace(ray& r){
+
+    inline double random_double() {
+        return rand() / (RAND_MAX + 1.0);
+    }
+
+    void raytracesample(ray& sample){
         int min_index = 0;
         double min_t = __DBL_MAX__;
         for(int i = 0;i<s;i++){
-            double t = sphere_collision(sphere_cen[i],sphere_r[i],r);
+            double t = sphere_collision(sphere_cen[i],sphere_r[i],sample);
             if(t<min_t){
                 min_t = t;
                 min_index = i;
             }
         }
-        (min_t == __DBL_MAX__) ? r.color = vec3() : r.color = sphere_col[min_index];
-    }    
+        (min_t == __DBL_MAX__) ? sample.color = vec3() : sample.color = sphere_col[min_index];
+    }
 
-         
+    void raytrace(ray& r){
+        vec3 color;
+        for(int i = 0;i<samples;i++){
+            vec3 start = r.start;
+            vec3 dir = r.dir + camera.pixel_delta_u*(-0.5+random_double())+camera.pixel_delta_v*(-0.5+random_double());
+            ray smpl(r.start,dir);
+            raytracesample(smpl);
+            color = color + smpl.color;
+        }
+        r.color = color/samples;
+    }
+
+
+
+
+
+
 };
 
 World world;
 
 
-//s

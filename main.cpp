@@ -1,20 +1,19 @@
 #include<iostream>
 #include<algorithm>
-#include"vec3.hpp"
-#include"objects.hpp"
 #include"camera.hpp"
+#include"objects.hpp"
+
 
 using namespace std;
 
 int main(){
 
-    camera camera;
     camera.initialize();
     // render 
 
     //open the file and make list 
     ofstream f;
-    f.open("image1.ppm",fstream::binary|fstream::out);
+    f.open("image.ppm",fstream::binary|fstream::out);
     f<<"P6\n"<<camera.image_width<<" "<<camera.image_height<<"\n255\n";
     int numberof_pixel_values = 3*camera.image_height*camera.image_width;
     uint8_t image_pixels[numberof_pixel_values] = {0};
