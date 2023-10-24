@@ -25,9 +25,9 @@ int main(){
             auto pixel = pixel_start + camera.pixel_delta_u*i;
             vec3 dir = pixel - camera.eye;
             ray r = ray(camera.eye,dir);
-
+            
             world.raytrace(r);
-
+            
             image_pixels[pixel_value_index] = static_cast<uint8_t>(255.999 * r.color.x);
             image_pixels[pixel_value_index+1] = static_cast<uint8_t>(255.999 * r.color.y);
             image_pixels[pixel_value_index+2] = static_cast<uint8_t>(255.999 * r.color.z);

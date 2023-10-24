@@ -60,7 +60,7 @@ public:
     vec3 start,dir;
     vec3 color;
     ray(){}
-    ray(vec3& s ,vec3& d){
+    ray(vec3 s ,vec3 d){
         start = s;
         dir = d;
     }
