@@ -34,7 +34,14 @@ class World{
         return rand() / (RAND_MAX + 1.0);
     }
 
+    inline const char* hit_type(int i){
+        if (i<s){
+            return "sphere";
+        }
+    }
+
     void raytracesample(ray& sample){
+        double a = (sample.dir.unitvector().y + 1)*0.5; 
         int min_index = 0;
         double min_t = __DBL_MAX__;
         for(int i = 0;i<s;i++){
@@ -44,7 +51,19 @@ class World{
                 min_index = i;
             }
         }
-        (min_t == __DBL_MAX__) ? sample.color = vec3() : sample.color = sphere_col[min_index];
+        auto HitType = hit_type(min_index);
+        if (min_t != __DBL_MAX__){
+            vec3 outward_normal;
+            if (HitType == "sphere"){
+                outward_normal = sample.point(min_t) - sphere_cen[min_index];
+            }
+            vec3 child_ray = sample.point(min_t)+random_sphere();
+            if(dot(outward_normal,child_ray)<0){
+                child_ray = child_ray*-1;
+            }
+            
+        }
+        //(min_t == __DBL_MAX__) ? sample.color = vec3(1,1,1)*a+vec3(0,0,1)*(1-a) : sample.color = sphere_col[min_index];
     }
 
     void raytrace(ray& r){
@@ -59,6 +78,16 @@ class World{
         r.color = color/samples;
     }
 
+    vec3 random_sphere(){
+        while (true)
+        {
+            vec3 randvec(random_double()*2 -1,random_double()*2 - 1,random_double()*2 - 1) ;
+            if(randvec.length()<=1){
+                return randvec.unitvector();
+            }
+        }
+        
+    }
 
 
 

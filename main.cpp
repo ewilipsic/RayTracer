@@ -3,7 +3,6 @@
 #include"camera.hpp"
 #include"objects.hpp"
 
-
 using namespace std;
 
 int main(){
@@ -27,9 +26,7 @@ int main(){
             vec3 dir = pixel - camera.eye;
             ray r = ray(camera.eye,dir);
 
-
             world.raytrace(r);
-
 
             image_pixels[pixel_value_index] = static_cast<uint8_t>(255.999 * r.color.x);
             image_pixels[pixel_value_index+1] = static_cast<uint8_t>(255.999 * r.color.y);
