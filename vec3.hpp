@@ -48,6 +48,9 @@ public:
         return(vec3(0,0,0));
     }
 };
+vec3 vecmult(const vec3& first,const vec3& other){
+    return vec3(first.x*other.x,first.y*other.y,first.z*other.z);
+} 
 double dot(const vec3& first,const vec3& other){
         return first.x*other.x + first.y*other.y + first.z*other.z;
     }

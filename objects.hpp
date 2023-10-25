@@ -5,14 +5,15 @@
 class World{
     public:
 
-    int samples  = 100;
+    int samples  = 100; //number of rays for anti aliasing
+    int max_depth = 10; //maximum number of child rays
 
     // spheres  (s)
     #define s 2
 
     vec3 sphere_cen[s] = {vec3(0,-100.5,-1),vec3(0,0,-1)};
     double sphere_r[s] = {100,0.5};
-   // vec3 sphere_col[s] = {vec3(1.0,1.0,1.0),vec3(0,0,1.0)};
+    vec3 sphere_col[s] = {vec3(1.0,0,0),vec3(0,1.0,0)};
 
     double sphere_collision(const vec3& center,double r,const ray& i_ray){
         vec3 sc = i_ray.start - center;
@@ -30,18 +31,20 @@ class World{
     }
 
     // world.raytrace
-
     inline double random_double() {
         return rand() / (RAND_MAX + 1.0);
     }
-
     inline const char* hit_type(int i){
         if (i<s){
             return "sphere";
         }
     }
 
-    vec3 raytracesample(ray& sample){
+    vec3 raytracesample(ray& sample,int depth){
+        depth--;
+        if(depth<=0){
+            return vec3(0,0,0);
+        }
         int min_index = 0;
         double min_t = __DBL_MAX__;
         for(int i = 0;i<s;i++){
@@ -57,27 +60,23 @@ class World{
             if (HitType == "sphere"){
                 outward_normal = sample.point(min_t) - sphere_cen[min_index];
             }
-            vec3 child_ray_start = sample.point(min_t);
-            ray child_ray(child_ray_start,random_sphere());
-            if(dot(outward_normal,child_ray.dir)<0){
+            ray child_ray(sample.point(min_t),outward_normal.unitvector() + random_sphere());
+/*          if(dot(outward_normal,child_ray.dir)<0){
                 child_ray.dir = child_ray.dir*-1;
-            }
-            return raytracesample(child_ray) * 0.5;
+            }                                                 */ 
+            return vecmult(raytracesample(child_ray,depth),sphere_col[min_index]);
         }
         else{
             double a = 0.5*(sample.dir.unitvector().y + 1.0);
-            return vec3(1,1,1)*a+vec3(0,0,1)*(1-a);
+            return vec3(1,1,1)*a+vec3(0,0,1)*(1-a);                   //void color
         }
-        //(min_t == __DBL_MAX__) ? sample.color = vec3(1,1,1)*a+vec3(0,0,1)*(1-a) : sample.color = sphere_col[min_index];
     }
 
     void raytrace(ray& r){
         vec3 color;
         for(int i = 0;i<samples;i++){
-            vec3 start = r.start;
-            vec3 dir = r.dir + camera.pixel_delta_u*(-0.5+random_double())+camera.pixel_delta_v*(-0.5+random_double());
-            ray smpl(r.start,dir);
-            color = color + raytracesample(smpl);
+            ray smpl(r.start,r.dir + camera.pixel_delta_u*(-0.5+random_double())+camera.pixel_delta_v*(-0.5+random_double()));
+            color = color + raytracesample(smpl,max_depth);
         }
         r.color = color/samples;
     }
@@ -90,7 +89,6 @@ class World{
                 return randvec.unitvector();
             }
         }
-        
     }
 };
 

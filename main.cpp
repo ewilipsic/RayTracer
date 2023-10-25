@@ -1,18 +1,19 @@
 #include<iostream>
 #include<algorithm>
+#include<chrono>
 #include"camera.hpp"
 #include"objects.hpp"
 
 using namespace std;
 
 int main(){
+    auto start = std::chrono::high_resolution_clock::now();
 
     camera.initialize();
     // render 
-
     //open the file and make list 
     ofstream f;
-    f.open("image.ppm",fstream::binary|fstream::out);
+    f.open("image2.ppm",fstream::binary|fstream::out);
     f<<"P6\n"<<camera.image_width<<" "<<camera.image_height<<"\n255\n";
     int numberof_pixel_values = 3*camera.image_height*camera.image_width;
     uint8_t image_pixels[numberof_pixel_values] = {0};
@@ -27,7 +28,7 @@ int main(){
             ray r = ray(camera.eye,dir);
             
             world.raytrace(r);
-            
+
             image_pixels[pixel_value_index] = static_cast<uint8_t>(255.999 * r.color.x);
             image_pixels[pixel_value_index+1] = static_cast<uint8_t>(255.999 * r.color.y);
             image_pixels[pixel_value_index+2] = static_cast<uint8_t>(255.999 * r.color.z);
@@ -37,5 +38,7 @@ int main(){
     }
 //write to file
 f.write((char*) &image_pixels,numberof_pixel_values);
-cout<<"done";
+auto end = std::chrono::high_resolution_clock::now();
+std::chrono::duration<float> duration = end - start;
+cout<<"done in "<<duration.count()<<"sec \n";
 }
