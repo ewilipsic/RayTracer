@@ -13,7 +13,7 @@ int main(){
     // render 
     //open the file and make list 
     ofstream f;
-    f.open("image2.ppm",fstream::binary|fstream::out);
+    f.open("image3.ppm",fstream::binary|fstream::out);
     f<<"P6\n"<<camera.image_width<<" "<<camera.image_height<<"\n255\n";
     int numberof_pixel_values = 3*camera.image_height*camera.image_width;
     uint8_t image_pixels[numberof_pixel_values] = {0};
