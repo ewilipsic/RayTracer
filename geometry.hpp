@@ -1,5 +1,9 @@
 #pragma once
 #include"vec3.hpp"
+
+#define reflective 1
+#define diffuse 0
+
 #define p 1
 #define s 1
 
@@ -26,6 +30,7 @@ class Spheres{
 
     public:
     vec3 sphere_col[s] = {vec3(1.0,0,0)};
+    int sphere_mat[s] = {diffuse};
     double hit(const ray& incident,int* index){
         int min_index = 0;
         double min_t = __DBL_MAX__;
@@ -50,6 +55,7 @@ class Spheres{
 class Spheres{
     public:
     vec3 sphere_col[1] = {vec3(0,0,0)};
+    int sphere_mat[s] = {diffuse};
     double hit(const ray& incident,int* index){
         *index = 0;
         return __DBL_MAX__;
@@ -63,13 +69,14 @@ class Spheres{
 #undef s
 
 #if p!= 0
-
 class Planes{
     private:
     vec3 plane_n[p] = {vec3(0,1,0)};
     vec3 plane_point[p] = {vec3(0,-1,-1)};
 
-    double plane_collision(const vec3& normal,const vec3& point,const ray& i_ray){
+    double
+    
+     plane_collision(const vec3& normal,const vec3& point,const ray& i_ray){
         double numerator = dot((point-i_ray.start),normal);
         double denominator = dot(i_ray.dir,normal);
         if(denominator == 0){      // because floating point exact zero will be rare so we might want to change that
@@ -83,6 +90,7 @@ class Planes{
 
     public:
     vec3 plane_col[p] = {vec3(0,1,0)};
+    int plane_mat[p] = {diffuse};
     double hit(const ray& incident,int* index){
         int min_index = 0;
         double min_t = __DBL_MAX__;
@@ -107,12 +115,13 @@ class Planes{
 class Planes{
     public:
     vec3 plane_col[1] = {vec3(0,0,1.0)};
+    int plane_mat[p] = {reflective};
     double hit(const ray& incident,int* index){
         *index = 0;
         return __DBL_MAX__;
     }
     vec3 outnormal(ray const& i_ray,int index){
-            return vec3(0,0,0);
+    return vec3(0,0,0);
     }
 };
 
