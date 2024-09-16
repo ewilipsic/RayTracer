@@ -11,14 +11,14 @@ public:
         z=Z;
     }
     // operator here
-    vec3 operator+(const vec3& other){
+    vec3 operator+(const vec3& other) const {
         return vec3(x+other.x,y+other.y,z+other.z);
     }
-    vec3 operator*(const double i){
+    vec3 operator*(const double i) const{
         return vec3(x*i,y*i,z*i);
     
     }
-     vec3 operator/(const double i){
+     vec3 operator/(const double i) const{
         return vec3(x/i,y/i,z/i);
     
     }
@@ -48,6 +48,9 @@ public:
         return(vec3(0,0,0));
     }
 };
+vec3 vecmult(const vec3& first,const vec3& other){
+    return vec3(first.x*other.x,first.y*other.y,first.z*other.z);
+} 
 double dot(const vec3& first,const vec3& other){
         return first.x*other.x + first.y*other.y + first.z*other.z;
     }
@@ -60,11 +63,11 @@ public:
     vec3 start,dir;
     vec3 color;
     ray(){}
-    ray(vec3& s ,vec3& d){
+    ray(vec3 s ,vec3 d){
         start = s;
         dir = d;
     }
-    vec3 point(double i){
+    vec3 point(double i) const {
         return start + dir*i;
     }
 };
